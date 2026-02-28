@@ -15,16 +15,16 @@ try:
    response = requests.get(url="https://api.openweathermap.org/data/2.5/forecast", params=PARAMETERS)
    response.raise_for_status()
    data = response.json()
-   print(data)
+   
 except requests.exceptions.HTTPError as error:
    print("Error occurred:", error)
    data = {"error": str(error)}
 
-for list_item in data["list"]:
-   for weather_item in list_item["weather"]:
-       print("weather_item: ", weather_item)
-       if weather_item["id"] < 700:
-           need_umbrella = True
+if data and "list" in data:
+   for list_item in data["list"]:
+      for weather_item in list_item["weather"]:
+          if weather_item["id"] < 700:
+              need_umbrella = True
 
 print(need_umbrella)
 
@@ -35,3 +35,4 @@ PARAMETERS_SMS = {
 }
 if need_umbrella:
    response_sms = requests.get(url="https://api.callmebot.com/whatsapp.php", params=PARAMETERS_SMS)
+
